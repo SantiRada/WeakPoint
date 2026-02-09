@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fc9be20-2c1d-46be-a0e4-41bd6542a398" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Common/Point.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +55,7 @@
     "Maven.Custom_UI.executor": "Run",
     "Maven.ExamplePlugin (1).executor": "Run",
     "Maven.ExamplePlugin [install:install-file...].executor": "Run",
+    "Maven.WeakPoint [clean].executor": "Run",
     "Maven.WeakPoint.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
@@ -159,7 +160,8 @@
       <workItem from="1770580229548" duration="3967000" />
       <workItem from="1770601201509" duration="2031000" />
       <workItem from="1770621354043" duration="323000" />
-      <workItem from="1770621767939" duration="9730000" />
+      <workItem from="1770621767939" duration="10315000" />
+      <workItem from="1770662098063" duration="8233000" />
     </task>
     <servers />
   </component>

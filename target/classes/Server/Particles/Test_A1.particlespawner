@@ -1,0 +1,84 @@
+{
+  "RenderMode": "Erosion",
+  "ParticleRotationInfluence": "Billboard",
+  "MaxConcurrentParticles": 1,
+  "ParticleLifeSpan": {
+    "Min": 29,
+    "Max": 31
+  },
+  "TrailSpawnerPositionMultiplier": 1,
+  "TrailSpawnerRotationMultiplier": 1,
+  "SpawnRate": {
+    "Min": 1.6,
+    "Max": 1.6
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Circles/Erosion_Circle.png",
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "None",
+    "Animation": {
+      "0": {
+        "Opacity": 0.75,
+        "Color": "#D91616",
+        "Scale": {
+          "X": {
+            "Min": 0.025,
+            "Max": 0.025
+          },
+          "Y": {
+            "Min": 0.025,
+            "Max": 0.025
+          }
+        }
+      },
+      "50": {
+        "Color": "#E62C2C",
+        "Opacity": 0.9,
+        "Scale": {
+          "X": {
+            "Min": 0.08,
+            "Max": 0.08
+          },
+          "Y": {
+            "Min": 0.08,
+            "Max": 0.08
+          }
+        }
+      },
+      "100": {
+        "Color": "#D91616",
+        "Opacity": 0.75,
+        "Scale": {
+          "X": {
+            "Min": 0.025,
+            "Max": 0.025
+          },
+          "Y": {
+            "Min": 0.025,
+            "Max": 0.025
+          }
+        }
+      }
+    },
+    "InitialAnimationFrame": {
+      "Scale": {
+        "X": {
+          "Min": 0.3,
+          "Max": 0.3
+        }
+      },
+      "Opacity": 0.5,
+      "Color": "#ffffff"
+    }
+  },
+  "LinearFiltering": true,
+  "Shape": "Sphere",
+  "UseEmitDirection": true,
+  "TotalParticles": {
+    "Min": 1,
+    "Max": 1
+  },
+  "LifeSpan": 30,
+  "SpawnBurst": false,
+  "ParticleRotateWithSpawner": true
+}
