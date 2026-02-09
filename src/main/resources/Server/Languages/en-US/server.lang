@@ -1,0 +1,5 @@
+# === Items ===
+items.Ingredient_Bar_Test.name = Test Ingot
+items.Ore_Test_Basalt.name = Test Ore - Basalt
+items.Ore_Test.name = Test Ore
+items.Ore_Test.description = Can be smelted into a Test Ingot at a Furnace

@@ -1,5 +1,7 @@
 package Tenzinn;
 
+import Tenzinn.Events.MiningSystem;
+
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 
@@ -11,6 +13,6 @@ public class WeakPoint extends JavaPlugin {
     
     @Override
     protected void setup() {
-        
+        getEntityStoreRegistry().registerSystem(new MiningSystem());
     }
 }
