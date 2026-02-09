@@ -1,0 +1,20 @@
+{
+  "Group": "Tenzinn",
+  "Name": "WeakPoint",
+  "Version": "0.1.0",
+  "Description": "Fortnite-style block destruction system with weak points",
+  "Authors": [
+    {
+      "Name": "Tenzinn",
+      "Email": "santynrada+hytl@gmail.com",
+      "Url": "https://santiagorada.com/hytale"
+    }
+  ],
+  "Website": "https://santiagorada.com/hytale/plugins/weak-point",
+  "ServerVersion": "2026.02.06-0baf7c5aa",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "DisabledByDefault": false,
+  "IncludesAssetPack": true,
+  "Main": "Tenzinn.WeakPoint"
+}

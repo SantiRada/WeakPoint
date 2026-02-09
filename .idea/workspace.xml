@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9fc9be20-2c1d-46be-a0e4-41bd6542a398" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.run/WeakPoint.run.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="38lVVOALqgPegQSuM1LowRY5qdA" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.Countertale [--version].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [clean,package,-U].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [dependency:TinyMessage].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [dependency:com.github.Zoltus].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [dependency:purge-local-repository].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [install:install-file,\\...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [install:install-file...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.CustomHUD.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Custom_UI.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ExamplePlugin (1).executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ExamplePlugin [install:install-file...].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Console&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documentos\GitHub\Countertale\src\main\resources\Server\Prefabs" />
+      <recent name="D:\Games\Hytale My Mods\Deathmatch\Countertale\src\main\resources\Common\UI\Custom" />
+      <recent name="D:\Games\Hytale My Mods\Tutorials\CustomUI\custom-test\src\main\resources\Common\UI\Custom" />
+      <recent name="D:\Games\Hytale My Mods\Tutorials\CustomUI\custom-test\src\main\resources" />
+      <recent name="D:\Games\Hytale My Mods\Tutorials\CustomUI\custom-test\src\main" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="Tenzinn.Admin.UI" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn install:install-file  -Dfile=C:/Users/santy/AppData/Roaming/Hytale/install/release/package/game/latest/Server/HytaleServer.jar   -DgroupId=com.hypixel.hytale   -DartifactId=HytaleServer-parent   -Dversion=1.0-SNAPSHOT   -Dpackaging=jar" />
+      <command value="mvn clean package" />
+      <command value="mvn install:install-file \      -Dfile=/ruta/a/HytaleServer.jar \      -DgroupId=com.hypixel.hytale \      -DartifactId=Server \      -Dversion=1.0-SNAPSHOT \      -Dpackaging=jar" />
+      <command value="mvn install:install-file \ -Dfile=/ruta/a/HytaleServer.jar \ -DgroupId=com.hypixel.hytale \ -DartifactId=Server \ -Dversion=1.0-SNAPSHOT \ -Dpackaging=jar" />
+      <command value="mvn install:install-file -Dfile=/ruta/a/HytaleServer.jar -DgroupId=com.hypixel.hytale -DartifactId=Server -Dversion=1.0-SNAPSHOT -Dpackaging=jar" />
+      <command value="mvn dependency:purge-local-repository" />
+      <command value="mvn --version" />
+      <command value="mvn dependency:com.github.Zoltus" />
+      <command value="mvn dependency:TinyMessage" />
+      <command value="mvn clean install" />
+      <command value="mvn clean package -U" />
+      <command value="mvn clean" />
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="plugin-template" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="plugin-template" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.240" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9fc9be20-2c1d-46be-a0e4-41bd6542a398" name="Changes" comment="" />
+      <created>1769374170434</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1769374170434</updated>
+      <workItem from="1769374172423" duration="256000" />
+      <workItem from="1769374642812" duration="6094000" />
+      <workItem from="1769387197152" duration="10192000" />
+      <workItem from="1769406771338" duration="1987000" />
+      <workItem from="1769444085980" duration="2672000" />
+      <workItem from="1769560382860" duration="636000" />
+      <workItem from="1769783221337" duration="77000" />
+      <workItem from="1770155148767" duration="9052000" />
+      <workItem from="1770178776756" duration="5659000" />
+      <workItem from="1770185271781" duration="6460000" />
+      <workItem from="1770225945690" duration="14608000" />
+      <workItem from="1770268637176" duration="3167000" />
+      <workItem from="1770271857549" duration="1702000" />
+      <workItem from="1770274837553" duration="527000" />
+      <workItem from="1770275407246" duration="6162000" />
+      <workItem from="1770310276134" duration="4150000" />
+      <workItem from="1770314896486" duration="4000" />
+      <workItem from="1770314948841" duration="14531000" />
+      <workItem from="1770331120672" duration="2571000" />
+      <workItem from="1770403425543" duration="2410000" />
+      <workItem from="1770445438980" duration="8746000" />
+      <workItem from="1770490628139" duration="16930000" />
+      <workItem from="1770580229548" duration="3967000" />
+      <workItem from="1770601201509" duration="2031000" />
+      <workItem from="1770621354043" duration="323000" />
+      <workItem from="1770621767939" duration="1096000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.ui" />
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.lang" />
+  </component>
+</project>
