@@ -5,9 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fc9be20-2c1d-46be-a0e4-41bd6542a398" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/TestPlayerViewCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/HytaleServer.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Common/Point.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Item/Items/Ingredient_Bar_Test.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Item/Items/Ore_Test.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Item/Items/Ore_Test_Basalt.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Languages/en-US/server.lang" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Test.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Test_A1.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Test_A2.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Weak_Point_Particle.particlesystem" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Item/Items/Ingredient_Bar_Test.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Item/Items/Ore_Test.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Item/Items/Ore_Test_Basalt.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Languages/en-US/server.lang" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Test.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Test_A1.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Test_A2.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Server/Particles/Weak_Point_Particle.particlesystem" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,47 +60,47 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.Countertale [--version].executor": "Run",
-    "Maven.Countertale [clean,install].executor": "Run",
-    "Maven.Countertale [clean,package,-U].executor": "Run",
-    "Maven.Countertale [clean,package].executor": "Run",
-    "Maven.Countertale [clean].executor": "Run",
-    "Maven.Countertale [dependency:TinyMessage].executor": "Run",
-    "Maven.Countertale [dependency:com.github.Zoltus].executor": "Run",
-    "Maven.Countertale [dependency:purge-local-repository].executor": "Run",
-    "Maven.Countertale [install:install-file,\\...].executor": "Run",
-    "Maven.Countertale [install:install-file...].executor": "Run",
-    "Maven.Countertale.executor": "Run",
-    "Maven.CustomHUD.executor": "Run",
-    "Maven.Custom_UI.executor": "Run",
-    "Maven.ExamplePlugin (1).executor": "Run",
-    "Maven.ExamplePlugin [install:install-file...].executor": "Run",
-    "Maven.WeakPoint [clean].executor": "Run",
-    "Maven.WeakPoint.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "master",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "Console",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.Countertale [--version].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [clean,package,-U].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [dependency:TinyMessage].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [dependency:com.github.Zoltus].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [dependency:purge-local-repository].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [install:install-file,\\...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale [install:install-file...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Countertale.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.CustomHUD.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Custom_UI.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ExamplePlugin (1).executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ExamplePlugin [install:install-file...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.WeakPoint [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.WeakPoint.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Console&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Documentos\GitHub\Countertale\src\main\resources\Server\Prefabs" />
@@ -162,6 +184,10 @@
       <workItem from="1770621354043" duration="323000" />
       <workItem from="1770621767939" duration="10315000" />
       <workItem from="1770662098063" duration="8233000" />
+      <workItem from="1770821667638" duration="9628000" />
+      <workItem from="1770860554744" duration="2259000" />
+      <workItem from="1770866979418" duration="2843000" />
+      <workItem from="1770870068264" duration="11511000" />
     </task>
     <servers />
   </component>

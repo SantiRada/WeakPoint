@@ -13,49 +13,49 @@
     "Max": 1.6
   },
   "Particle": {
-    "Texture": "Particles/Textures/Circles/Explosion_Shockwave.png",
+    "Texture": "Particles/Textures/Circles/Signature_Spin_GS2.png",
     "ScaleRatioConstraint": "OneToOne",
     "UVOption": "None",
     "Animation": {
       "0": {
         "Opacity": 0.75,
-        "Color": "#E9F2EE",
+        "Color": "#4388ff",
         "Scale": {
           "X": {
-            "Min": 0.045,
-            "Max": 0.045
+            "Min": 0.05,
+            "Max": 0.05
           },
           "Y": {
-            "Min": 0.045,
-            "Max": 0.045
+            "Min": 0.05,
+            "Max": 0.05
           }
         }
       },
       "50": {
-        "Color": "#FFFFFF",
+        "Color": "#1d5bc7",
         "Opacity": 0.9,
         "Scale": {
           "X": {
-            "Min": 0.1,
-            "Max": 0.1
+            "Min": 0.12,
+            "Max": 0.12
           },
           "Y": {
-            "Min": 0.1,
-            "Max": 0.1
+            "Min": 0.12,
+            "Max": 0.12
           }
         }
       },
       "100": {
-        "Color": "#E9F2EE",
+        "Color": "#4388ff",
         "Opacity": 0.75,
         "Scale": {
           "X": {
-            "Min": 0.045,
-            "Max": 0.045
+            "Min": 0.05,
+            "Max": 0.05
           },
           "Y": {
-            "Min": 0.045,
-            "Max": 0.045
+            "Min": 0.05,
+            "Max": 0.05
           }
         }
       }

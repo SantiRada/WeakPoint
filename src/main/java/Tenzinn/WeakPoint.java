@@ -1,6 +1,7 @@
 package Tenzinn;
 
 import Tenzinn.Events.MiningSystem;
+import Tenzinn.Commands.TestPlayerViewCommand;
 
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -13,6 +14,8 @@ public class WeakPoint extends JavaPlugin {
     
     @Override
     protected void setup() {
+        getCommandRegistry().registerCommand(new TestPlayerViewCommand("view", "Info to where view player"));
+
         getEntityStoreRegistry().registerSystem(new MiningSystem());
     }
 }

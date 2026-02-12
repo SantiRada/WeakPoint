@@ -13,49 +13,49 @@
     "Max": 1.6
   },
   "Particle": {
-    "Texture": "Particles/Textures/Circles/Signature_Spin_GS2.png",
+    "Texture": "Particles/Textures/Circles/Erosion_Circle.png",
     "ScaleRatioConstraint": "OneToOne",
     "UVOption": "None",
     "Animation": {
       "0": {
         "Opacity": 0.75,
-        "Color": "#4388ff",
+        "Color": "#D91616",
         "Scale": {
           "X": {
-            "Min": 0.05,
-            "Max": 0.05
+            "Min": 0.025,
+            "Max": 0.025
           },
           "Y": {
-            "Min": 0.05,
-            "Max": 0.05
+            "Min": 0.025,
+            "Max": 0.025
           }
         }
       },
       "50": {
-        "Color": "#1d5bc7",
+        "Color": "#E62C2C",
         "Opacity": 0.9,
         "Scale": {
           "X": {
-            "Min": 0.12,
-            "Max": 0.12
+            "Min": 0.08,
+            "Max": 0.08
           },
           "Y": {
-            "Min": 0.12,
-            "Max": 0.12
+            "Min": 0.08,
+            "Max": 0.08
           }
         }
       },
       "100": {
-        "Color": "#4388ff",
+        "Color": "#D91616",
         "Opacity": 0.75,
         "Scale": {
           "X": {
-            "Min": 0.05,
-            "Max": 0.05
+            "Min": 0.025,
+            "Max": 0.025
           },
           "Y": {
-            "Min": 0.05,
-            "Max": 0.05
+            "Min": 0.025,
+            "Max": 0.025
           }
         }
       }
@@ -69,7 +69,6 @@
       },
       "Opacity": 0.5,
       "Color": "#ffffff"
-      }
     }
   },
   "LinearFiltering": true,

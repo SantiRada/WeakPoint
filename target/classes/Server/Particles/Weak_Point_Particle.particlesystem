@@ -1,12 +1,8 @@
 {
+  "IsImportant": true,
   "Spawners": [
     {
-      "SpawnerId": "Test",
-      "PositionOffset": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
+      "SpawnerId": "White_Shape",
       "SpawnRate": {
         "Min": 1,
         "Max": 1
@@ -15,16 +11,14 @@
         "Min": 29,
         "Max": 31
       },
-      "TotalSpawners": 1,
-      "MaxConcurrent": 1
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
     },
     {
-      "SpawnerId": "Test_A1",
-      "PositionOffset": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
+      "SpawnerId": "Blue_Shape",
       "SpawnRate": {
         "Min": 1,
         "Max": 1
@@ -33,16 +27,14 @@
         "Min": 29,
         "Max": 31
       },
-      "TotalSpawners": 1,
-      "MaxConcurrent": 1
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
     },
     {
-      "SpawnerId": "Test_A2",
-      "PositionOffset": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
+      "SpawnerId": "Red_Shape",
       "SpawnRate": {
         "Min": 1,
         "Max": 1
@@ -51,10 +43,12 @@
         "Min": 29,
         "Max": 31
       },
-      "TotalSpawners": 1,
-      "MaxConcurrent": 1
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
     }
   ],
-  "IsImportant": true,
   "LifeSpan": 30
 }
