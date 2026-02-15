@@ -5,31 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fc9be20-2c1d-46be-a0e4-41bd6542a398" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/TestPlayerViewCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/HytaleServer.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Item/Items/Ingredient_Bar_Test.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Item/Items/Ore_Test.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Item/Items/Ore_Test_Basalt.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Languages/en-US/server.lang" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Test.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Test_A1.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Test_A2.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Weak_Point_Particle.particlesystem" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Item/Items/Ingredient_Bar_Test.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Item/Items/Ore_Test.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Item/Items/Ore_Test_Basalt.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Languages/en-US/server.lang" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Test.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Test_A1.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Test_A2.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Server/Particles/Weak_Point_Particle.particlesystem" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,6 +167,7 @@
       <workItem from="1770860554744" duration="2259000" />
       <workItem from="1770866979418" duration="2843000" />
       <workItem from="1770870068264" duration="11511000" />
+      <workItem from="1771090089526" duration="15647000" />
     </task>
     <servers />
   </component>

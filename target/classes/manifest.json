@@ -11,7 +11,7 @@
     }
   ],
   "Website": "https://santiagorada.com/hytale/plugins/weak-point",
-  "ServerVersion": "*",
+  "ServerVersion": "2026.02.11-255364b8e",
   "Dependencies": {},
   "OptionalDependencies": {},
   "DisabledByDefault": false,

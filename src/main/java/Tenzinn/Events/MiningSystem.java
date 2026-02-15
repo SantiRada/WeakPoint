@@ -7,24 +7,35 @@ import com.hypixel.hytale.protocol.Direction;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.protocol.ModelTransform;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.protocol.packets.world.SpawnParticleSystem;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 
-import java.awt.Color;
-import java.util.Random;
+import java.awt.*;
 import java.lang.reflect.Method;
+import java.util.Random;
 import javax.annotation.Nullable;
 
 public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEvent> {
-    
+
+    private Vector3i posBlock;
+
+    private float offsetPunch = 0.2f;
+
+    private Vector3d particlePosition = null;
+
     private Method writeMethod;
 
     public MiningSystem() {
@@ -41,7 +52,7 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
     @Override
     public void handle(int i, ArchetypeChunk<EntityStore> chunk, Store<EntityStore> store, CommandBuffer<EntityStore> buffer, DamageBlockEvent event) {
         if (event.getBlockType() == BlockType.EMPTY) return;
-        if(!event.getBlockType().getId().contains("Ore")) return;
+        if (!event.getBlockType().getId().contains("Ore")) return;
 
         Ref<EntityStore> ref = chunk.getReferenceTo(i);
         Player player = store.getComponent(ref, Player.getComponentType());
@@ -50,102 +61,243 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         if (playerRef == null) return;
 
-        event.setCancelled(true);
+        Vector3i targetBlock = event.getTargetBlock();
+
+        if (posBlock != null) {
+            if (posBlock.x != targetBlock.x || posBlock.y != targetBlock.y || posBlock.z != targetBlock.z) {
+                CancelMining(playerRef, event.getBlockType().getId());
+                playerRef.sendMessage(Message.raw("NUEVO BLOQUE").color(Color.CYAN));
+                posBlock = targetBlock;
+                particlePosition = null;
+            } else {
+                playerRef.sendMessage(Message.raw("OTROS GOLPES AL MISMO BLOQUE").color(Color.GRAY));
+            }
+        } else {
+            posBlock = targetBlock;
+            particlePosition = null;
+            playerRef.sendMessage(Message.raw("PRIMER BLOQUE").color(Color.GREEN));
+        }
 
         try {
-            // Calcular el punto exacto de impacto en la superficie
-            Vector3f hitPosition = calculateHitPosition(playerRef, event.getTargetBlock());
+            if (particlePosition == null) {
+                playerRef.sendMessage(Message.raw("SE CANCELA EL DAÑO - Generando weak point").color(Color.ORANGE));
+                event.setCancelled(true);
 
-            // Crear la partícula en el punto de impacto
-            SpawnParticleSystem packet = new SpawnParticleSystem();
-            packet.particleSystemId = "Weak_Point_Particle"; // Cambia a tu partícula custom
-            packet.position = new Position(hitPosition.x, hitPosition.y, hitPosition.z);
-            packet.rotation = new Direction(0.0f, 0.0f, 0.0f); // Rotación neutral
-            packet.scale = 1.0f;
-            packet.color = null;
+                SpawnParticleSystem packet = CreateParticle(playerRef, event);
+                if (writeMethod != null) {
+                    writeMethod.invoke(playerRef.getPacketHandler(), packet);
+                }
+            } else {
+                Vector3f hitPosition = calculateHitPosition(playerRef, targetBlock);
+                float distance = hitPosition.distanceTo(particlePosition.toVector3f());
 
-            // Enviar el packet usando reflexión
-            if (writeMethod != null) {
-                writeMethod.invoke(playerRef.getPacketHandler(), packet);
+                if (distance < offsetPunch) {
+                    playerRef.sendMessage(Message.raw("¡GOLPE EXITOSO! Distancia: " + String.format("%.3f", distance)).color(Color.GREEN));
+
+                    SpawnParticleSystem packet = CreateParticle(playerRef, event);
+                    if (writeMethod != null) {
+                        writeMethod.invoke(playerRef.getPacketHandler(), packet);
+                    }
+                } else {
+                    playerRef.sendMessage(Message.raw("¡FALLASTE! Distancia: " + String.format("%.3f", distance)).color(Color.RED));
+                    CancelMining(playerRef, event.getBlockType().getId());
+                    FinishMining();
+                }
             }
 
         } catch (Exception e) {
-            playerRef.sendMessage(Message.raw("Error: " + e.getMessage()).color(Color.RED));
+            playerRef.sendMessage(Message.raw("¡ERROR! " + e.getMessage()).color(Color.RED));
             e.printStackTrace();
+        }
+
+        if (event.getCurrentDamage() < 0.1f) {
+            playerRef.sendMessage(Message.raw("SE ROMPIÓ EL BLOQUE").color(Color.YELLOW));
+            FinishMining();
         }
     }
 
+    private SpawnParticleSystem CreateParticle(PlayerRef playerRef, DamageBlockEvent event) {
+        particlePosition = calculateNewPosition(event.getTargetBlock());
+
+        SpawnParticleSystem packet = new SpawnParticleSystem();
+        packet.particleSystemId = "Weak_Point_Particle";
+        packet.position = new Position(particlePosition.x, particlePosition.y, particlePosition.z);
+        packet.scale = 1.0f;
+
+        playerRef.sendMessage(Message.raw("¡LO GOLPEASTE!").color(Color.orange));
+
+        return packet;
+    }
+
+    private void FinishMining () {
+        posBlock = null;
+        particlePosition = null;
+    }
+
+    private void CancelMining(PlayerRef playerRef, String id) {
+        World world = Universe.get().getWorld(playerRef.getWorldUuid());
+        world.setBlock(posBlock.x, posBlock.y, posBlock.z, id);
+    }
+
     private Vector3f calculateHitPosition(PlayerRef playerRef, Vector3i blockPosition) {
-        Vector3f rayOrigin = playerRef.getTransform().getPosition().toVector3f();
-        rayOrigin = rayOrigin.add(new Vector3f(0, 1.6f, 0));
+        try {
+            World world = Universe.get().getWorld(playerRef.getWorldUuid());
+            if (world == null) return new Vector3f(blockPosition.x + 0.5f, blockPosition.y + 0.5f, blockPosition.z + 0.5f);
 
-        // Calcular dirección de la mirada (normalizada)
-        double pitch = playerRef.getTransform().getRotation().getPitch();
-        double yaw = playerRef.getTransform().getRotation().getYaw();
+            Store<EntityStore> store = world.getEntityStore().getStore();
+            Ref<EntityStore> ref = playerRef.getReference();
 
-        double newX = -Math.cos(pitch) * Math.sin(yaw);
-        double newY = Math.sin(pitch);
-        double newZ = -Math.cos(pitch) * Math.cos(yaw);
+            TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+            if (transform == null) return new Vector3f(blockPosition.x + 0.5f, blockPosition.y + 0.5f, blockPosition.z + 0.5f);
 
-        Vector3f rayDir = new Vector3f((float)newX, (float)newY, (float)newZ);
+            Vector3d playerPos = transform.getPosition();
+            float eyeHeight = 1.62f;
 
-        float length = (float)Math.sqrt(rayDir.x * rayDir.x + rayDir.y * rayDir.y + rayDir.z * rayDir.z);
-        if (length > 0) { rayDir = new Vector3f(rayDir.x / length, rayDir.y / length, rayDir.z / length); }
+            ModelTransform modelTransform = transform.getSentTransform();
+            Direction lookOrientation = modelTransform.lookOrientation;
 
-        // Definir los límites del bloque (AABB)
-        Vector3f boxMin = new Vector3f(blockPosition.x, blockPosition.y, blockPosition.z);
-        Vector3f boxMax = new Vector3f(blockPosition.x + 1, blockPosition.y + 1, blockPosition.z + 1);
+            float pitch = lookOrientation.pitch;
+            float yaw = lookOrientation.yaw;
 
-        // Algoritmo de intersección rayo-AABB
-        float tMin = Float.NEGATIVE_INFINITY;
-        float tMax = Float.POSITIVE_INFINITY;
+            // Calcular dirección
+            double dirX = -Math.sin(yaw) * Math.cos(pitch);
+            double dirY = Math.sin(pitch);
+            double dirZ = -Math.cos(yaw) * Math.cos(pitch);
 
-        // Eje X
-        if (Math.abs(rayDir.x) > 0.0001f) {
-            float t1 = (boxMin.x - rayOrigin.x) / rayDir.x;
-            float t2 = (boxMax.x - rayOrigin.x) / rayDir.x;
-            tMin = Math.max(tMin, Math.min(t1, t2));
-            tMax = Math.min(tMax, Math.max(t1, t2));
-        }
+            // Normalizar (por si acaso)
+            double length = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
+            dirX /= length;
+            dirY /= length;
+            dirZ /= length;
 
-        // Eje Y
-        if (Math.abs(rayDir.y) > 0.0001f) {
-            float t1 = (boxMin.y - rayOrigin.y) / rayDir.y;
-            float t2 = (boxMax.y - rayOrigin.y) / rayDir.y;
-            tMin = Math.max(tMin, Math.min(t1, t2));
-            tMax = Math.min(tMax, Math.max(t1, t2));
-        }
+            // Origen del rayo (ojos del jugador)
+            double rayX = playerPos.x;
+            double rayY = playerPos.y + eyeHeight;
+            double rayZ = playerPos.z;
 
-        // Eje Z
-        if (Math.abs(rayDir.z) > 0.0001f) {
-            float t1 = (boxMin.z - rayOrigin.z) / rayDir.z;
-            float t2 = (boxMax.z - rayOrigin.z) / rayDir.z;
-            tMin = Math.max(tMin, Math.min(t1, t2));
-            tMax = Math.min(tMax, Math.max(t1, t2));
-        }
+            // Encontrar la cara más cercana del bloque
+            Vector3f hit = null;
+            double minT = Double.MAX_VALUE;
 
-        // Verificar si hay intersección
-        if (tMax < tMin || tMax < 0) {
-            // No hay intersección, usar centro del bloque como fallback
+            // Límites del bloque
+            double minX = blockPosition.x;
+            double maxX = blockPosition.x + 1.0;
+            double minY = blockPosition.y;
+            double maxY = blockPosition.y + 1.0;
+            double minZ = blockPosition.z;
+            double maxZ = blockPosition.z + 1.0;
+
+            // Cara X- (Oeste)
+            if (Math.abs(dirX) > 0.0001) {
+                double t = (minX - rayX) / dirX;
+                if (t > 0 && t < minT) {
+                    double y = rayY + dirY * t;
+                    double z = rayZ + dirZ * t;
+                    if (y >= minY && y <= maxY && z >= minZ && z <= maxZ) {
+                        minT = t;
+                        hit = new Vector3f((float)minX, (float)y, (float)z);
+                    }
+                }
+            }
+
+            // Cara X+ (Este)
+            if (Math.abs(dirX) > 0.0001) {
+                double t = (maxX - rayX) / dirX;
+                if (t > 0 && t < minT) {
+                    double y = rayY + dirY * t;
+                    double z = rayZ + dirZ * t;
+                    if (y >= minY && y <= maxY && z >= minZ && z <= maxZ) {
+                        minT = t;
+                        hit = new Vector3f((float)maxX, (float)y, (float)z);
+                    }
+                }
+            }
+
+            // Cara Y- (Abajo)
+            if (Math.abs(dirY) > 0.0001) {
+                double t = (minY - rayY) / dirY;
+                if (t > 0 && t < minT) {
+                    double x = rayX + dirX * t;
+                    double z = rayZ + dirZ * t;
+                    if (x >= minX && x <= maxX && z >= minZ && z <= maxZ) {
+                        minT = t;
+                        hit = new Vector3f((float)x, (float)minY, (float)z);
+                    }
+                }
+            }
+
+            // Cara Y+ (Arriba)
+            if (Math.abs(dirY) > 0.0001) {
+                double t = (maxY - rayY) / dirY;
+                if (t > 0 && t < minT) {
+                    double x = rayX + dirX * t;
+                    double z = rayZ + dirZ * t;
+                    if (x >= minX && x <= maxX && z >= minZ && z <= maxZ) {
+                        minT = t;
+                        hit = new Vector3f((float)x, (float)maxY, (float)z);
+                    }
+                }
+            }
+
+            // Cara Z- (Norte)
+            if (Math.abs(dirZ) > 0.0001) {
+                double t = (minZ - rayZ) / dirZ;
+                if (t > 0 && t < minT) {
+                    double x = rayX + dirX * t;
+                    double y = rayY + dirY * t;
+                    if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
+                        minT = t;
+                        hit = new Vector3f((float)x, (float)y, (float)minZ);
+                    }
+                }
+            }
+
+            // Cara Z+ (Sur)
+            if (Math.abs(dirZ) > 0.0001) {
+                double t = (maxZ - rayZ) / dirZ;
+                if (t > 0 && t < minT) {
+                    double x = rayX + dirX * t;
+                    double y = rayY + dirY * t;
+                    if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
+                        minT = t;
+                        hit = new Vector3f((float)x, (float)y, (float)maxZ);
+                    }
+                }
+            }
+
+            if (hit != null) {
+                playerRef.sendMessage(Message.raw(String.format("Hit! Dist=%.3f Pos=(%.3f, %.3f, %.3f)", minT, hit.x, hit.y, hit.z)));
+                return hit;
+            }
+
+            playerRef.sendMessage(Message.raw("No hit encontrado"));
+            return new Vector3f(blockPosition.x + 0.5f, blockPosition.y + 0.5f, blockPosition.z + 0.5f);
+
+        } catch (Exception e) {
+            e.printStackTrace();
             return new Vector3f(blockPosition.x + 0.5f, blockPosition.y + 0.5f, blockPosition.z + 0.5f);
         }
+    }
 
-        // Calcular el punto de intersección (la entrada al bloque)
-        float t = tMin > 0 ? tMin : tMax;
-        Vector3f hitPosition = new Vector3f(
-                rayOrigin.x + rayDir.x * t,
-                rayOrigin.y + rayDir.y * t,
-                rayOrigin.z + rayDir.z * t
-        );
+    private Vector3d calculateNewPosition(Vector3i baseTransform) {
+        Random random = new Random();
+        double newX = baseTransform.x + 0.01 + (random.nextDouble() * 0.98);
+        double newY = baseTransform.y + 0.01 + (random.nextDouble() * 0.98);
+        double newZ = baseTransform.z + 0.01 + (random.nextDouble() * 0.98);
+        Vector3d randomTransform = new Vector3d(newX, newY, newZ);
+        double offset = 0.05f;
 
-        // Debug
-        playerRef.sendMessage(Message.raw("BlockPosition: (" + blockPosition.x + ", " + blockPosition.y + ", " + blockPosition.z + ")").color(Color.cyan));
-        playerRef.sendMessage(Message.raw("Origin: (" + rayOrigin.x + ", " + rayOrigin.y + ", " + rayOrigin.z + ")").color(Color.cyan));
-        playerRef.sendMessage(Message.raw("Dir: (" + rayDir.x + ", " + rayDir.y + ", " + rayDir.z + ")").color(Color.cyan));
-        playerRef.sendMessage(Message.raw("Hit t: " + t).color(Color.magenta));
-        playerRef.sendMessage(Message.raw("HitPosition: (" + hitPosition.x + ", " + hitPosition.y + ", " + hitPosition.z + ")").color(Color.orange));
+        Random randomValue = new Random();
+        int rnd = randomValue.nextInt(100);
 
-        return hitPosition;
+        // Como colocarle posición a una partícula...
+        if(rnd >= 0 && rnd < 20) { newX = baseTransform.x + 1 + offset; }
+        else if (rnd >= 20 && rnd < 40) { newX = baseTransform.x - offset; }
+        else if(rnd >= 40 && rnd < 60) { newY = baseTransform.y + 1 + offset; }
+        else if (rnd >= 60 && rnd < 80) { newZ = baseTransform.z + 1 + offset; }
+        else { newZ = baseTransform.z - offset; }
+
+        return new Vector3d(newX, newY, newZ);
     }
 
     @Nullable @Override
