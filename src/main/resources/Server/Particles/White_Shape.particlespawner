@@ -2,10 +2,6 @@
   "RenderMode": "Erosion",
   "ParticleRotationInfluence": "Billboard",
   "MaxConcurrentParticles": 1,
-  "ParticleLifeSpan": {
-    "Min": 29,
-    "Max": 31
-  },
   "TrailSpawnerPositionMultiplier": 1,
   "TrailSpawnerRotationMultiplier": 1,
   "SpawnRate": {
@@ -31,31 +27,59 @@
           }
         }
       },
-      "50": {
+      "10": {
         "Color": "#FFFFFF",
         "Opacity": 0.9,
         "Scale": {
           "X": {
-            "Min": 0.1,
-            "Max": 0.1
+            "Min": 0.085,
+            "Max": 0.085
           },
           "Y": {
-            "Min": 0.1,
-            "Max": 0.1
+            "Min": 0.085,
+            "Max": 0.085
+          }
+        }
+      },
+      "20": {
+        "Opacity": 0.75,
+        "Color": "#E9F2EE",
+        "Scale": {
+          "X": {
+            "Min": 0.045,
+            "Max": 0.045
+          },
+          "Y": {
+            "Min": 0.045,
+            "Max": 0.045
+          }
+        }
+      },
+      "35": {
+        "Color": "#E9F2EE",
+        "Opacity": 0.0,
+        "Scale": {
+          "X": {
+            "Min": 0.085,
+            "Max": 0.085
+          },
+          "Y": {
+            "Min": 0.085,
+            "Max": 0.085
           }
         }
       },
       "100": {
         "Color": "#E9F2EE",
-        "Opacity": 0.75,
+        "Opacity": 0.0,
         "Scale": {
           "X": {
-            "Min": 0.045,
-            "Max": 0.045
+            "Min": 0.085,
+            "Max": 0.085
           },
           "Y": {
-            "Min": 0.045,
-            "Max": 0.045
+            "Min": 0.085,
+            "Max": 0.085
           }
         }
       }
@@ -79,7 +103,7 @@
     "Min": 1,
     "Max": 1
   },
-  "LifeSpan": 30,
+  "LifeSpan": 1,
   "SpawnBurst": false,
   "ParticleRotateWithSpawner": true
 }

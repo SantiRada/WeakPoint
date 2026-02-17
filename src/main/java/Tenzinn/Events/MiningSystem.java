@@ -1,42 +1,54 @@
 package Tenzinn.Events;
 
+import com.hypixel.hytale.protocol.*;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.protocol.Position;
-import com.hypixel.hytale.protocol.Direction;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.component.query.Query;
-import com.hypixel.hytale.protocol.ModelTransform;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.component.system.EntityEventSystem;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.protocol.packets.world.SpawnParticleSystem;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 
 import java.awt.*;
-import java.lang.reflect.Method;
+import java.util.List;
+import java.awt.Color;
 import java.util.Random;
+import java.util.ArrayList;
+import java.lang.reflect.Method;
 import javax.annotation.Nullable;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledFuture;
 
 public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEvent> {
 
     private Vector3i posBlock;
 
-    private float offsetPunch = 0.2f;
+    private float offsetPunch = 0.32f;
 
     private Vector3d particlePosition = null;
 
     private Method writeMethod;
+
+    private ScheduledFuture<?> timerTask;
+    private float maxTime = 6f;
+    private float currentTime = 0f;
+
+    private World world;
 
     public MiningSystem() {
         super(DamageBlockEvent.class);
@@ -61,81 +73,125 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         if (playerRef == null) return;
 
+        if (world == null) { world = Universe.get().getWorld(playerRef.getWorldUuid()); }
+
         Vector3i targetBlock = event.getTargetBlock();
 
-        if (posBlock != null) {
-            if (posBlock.x != targetBlock.x || posBlock.y != targetBlock.y || posBlock.z != targetBlock.z) {
-                CancelMining(playerRef, event.getBlockType().getId());
-                playerRef.sendMessage(Message.raw("NUEVO BLOQUE").color(Color.CYAN));
-                posBlock = targetBlock;
-                particlePosition = null;
-            } else {
-                playerRef.sendMessage(Message.raw("OTROS GOLPES AL MISMO BLOQUE").color(Color.GRAY));
-            }
-        } else {
+        // VERIFICAR SI EL BLOQUE SE VA A ROMPER (ANTES de procesar)
+        if (event.getCurrentDamage() < 0.1f) { FinishMining(); return; }
+
+        // Verificar si es el mismo bloque
+        boolean isNewBlock = false;
+
+        if (posBlock == null) {
+            isNewBlock = true;
             posBlock = targetBlock;
-            particlePosition = null;
-            playerRef.sendMessage(Message.raw("PRIMER BLOQUE").color(Color.GREEN));
+        } else if (posBlock.x != targetBlock.x || posBlock.y != targetBlock.y || posBlock.z != targetBlock.z) {
+            event.setCancelled(true);
+
+            isNewBlock = true;
+
+            if(particlePosition != null) {
+                if (particlePosition.y != -100) CancelMining(event.getBlockType().getId());
+            }
+            posBlock = targetBlock;
         }
 
         try {
-            if (particlePosition == null) {
-                playerRef.sendMessage(Message.raw("SE CANCELA EL DAÑO - Generando weak point").color(Color.ORANGE));
-                event.setCancelled(true);
+            if (isNewBlock || particlePosition == null) {
+                DeleteOldParticleSystem();
 
-                SpawnParticleSystem packet = CreateParticle(playerRef, event);
-                if (writeMethod != null) {
-                    writeMethod.invoke(playerRef.getPacketHandler(), packet);
-                }
+                SpawnParticleSystem packet = CreateParticle(event, true);
+                if (packet != null) writeMethod.invoke(playerRef.getPacketHandler(), packet);
+
+                CreateParticleSystem(playerRef, event);
             } else {
+                // Mismo bloque: verificar si acertó
                 Vector3f hitPosition = calculateHitPosition(playerRef, targetBlock);
                 float distance = hitPosition.distanceTo(particlePosition.toVector3f());
 
                 if (distance < offsetPunch) {
-                    playerRef.sendMessage(Message.raw("¡GOLPE EXITOSO! Distancia: " + String.format("%.3f", distance)).color(Color.GREEN));
+                    // Reproducir sonido
+                    SoundUtil.playSoundEvent2d(SoundEvent.getAssetMap().getIndex("SFX_Crystal_Break"), SoundCategory.SFX, buffer);
 
-                    SpawnParticleSystem packet = CreateParticle(playerRef, event);
-                    if (writeMethod != null) {
-                        writeMethod.invoke(playerRef.getPacketHandler(), packet);
-                    }
+                    // Eliminar y crear nuevo
+                    DeleteOldParticleSystem();
+
+                    SpawnParticleSystem packet = CreateParticle(event, true);
+                    if (packet != null) writeMethod.invoke(playerRef.getPacketHandler(), packet);
+
+                    CreateParticleSystem(playerRef, event);
                 } else {
-                    playerRef.sendMessage(Message.raw("¡FALLASTE! Distancia: " + String.format("%.3f", distance)).color(Color.RED));
-                    CancelMining(playerRef, event.getBlockType().getId());
-                    FinishMining();
+                    CancelMining(event.getBlockType().getId());
                 }
             }
 
         } catch (Exception e) {
+            event.setCancelled(true);
+
             playerRef.sendMessage(Message.raw("¡ERROR! " + e.getMessage()).color(Color.RED));
             e.printStackTrace();
         }
-
-        if (event.getCurrentDamage() < 0.1f) {
-            playerRef.sendMessage(Message.raw("SE ROMPIÓ EL BLOQUE").color(Color.YELLOW));
-            FinishMining();
-        }
     }
 
-    private SpawnParticleSystem CreateParticle(PlayerRef playerRef, DamageBlockEvent event) {
-        particlePosition = calculateNewPosition(event.getTargetBlock());
+    private void DeleteOldParticleSystem () {
+        CancelTimer();
+
+        particlePosition = null;
+        currentTime = 0f;
+    }
+
+    private void CreateParticleSystem (PlayerRef playerRef, DamageBlockEvent event) {
+
+        if(event.getDamage() >= event.getCurrentDamage()) {
+            DeleteOldParticleSystem();
+            return;
+        }
+
+        timerTask = HytaleServer.SCHEDULED_EXECUTOR.scheduleWithFixedDelay(() -> {
+            try {
+                if(maxTime > currentTime) {
+                    SpawnParticleSystem packet = CreateParticle(event, false);
+                    if (packet != null) writeMethod.invoke(playerRef.getPacketHandler(), packet);
+
+                    currentTime += 0.35F;
+                } else {
+                    CancelMining(event.getBlockType().getId());
+                }
+            } catch (Exception e) { if (timerTask != null) timerTask.cancel(false); }
+        }, 350, 350, TimeUnit.MILLISECONDS);
+    }
+
+    private SpawnParticleSystem CreateParticle(DamageBlockEvent event, boolean isNew) {
+
+        if(event.getDamage() >= event.getCurrentDamage()) {
+            DeleteOldParticleSystem();
+            return null;
+        }
+
+        if (isNew) { particlePosition = calculateNewPosition(event.getTargetBlock()); }
+
+        if(event.getBlockType().getId().equals("Empty")) return null;
 
         SpawnParticleSystem packet = new SpawnParticleSystem();
         packet.particleSystemId = "Weak_Point_Particle";
         packet.position = new Position(particlePosition.x, particlePosition.y, particlePosition.z);
         packet.scale = 1.0f;
 
-        playerRef.sendMessage(Message.raw("¡LO GOLPEASTE!").color(Color.orange));
-
         return packet;
     }
 
     private void FinishMining () {
-        posBlock = null;
-        particlePosition = null;
+        CancelTimer();
+
+        currentTime = 0f;
+        posBlock = new Vector3i(0, -100, 0);
+        particlePosition = new Vector3d(0, -100, 0);
     }
 
-    private void CancelMining(PlayerRef playerRef, String id) {
-        World world = Universe.get().getWorld(playerRef.getWorldUuid());
+    private void CancelMining(String id) {
+        FinishMining();
+
         world.setBlock(posBlock.x, posBlock.y, posBlock.z, id);
     }
 
@@ -265,12 +321,8 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
                 }
             }
 
-            if (hit != null) {
-                playerRef.sendMessage(Message.raw(String.format("Hit! Dist=%.3f Pos=(%.3f, %.3f, %.3f)", minT, hit.x, hit.y, hit.z)));
-                return hit;
-            }
+            if (hit != null) { return hit; }
 
-            playerRef.sendMessage(Message.raw("No hit encontrado"));
             return new Vector3f(blockPosition.x + 0.5f, blockPosition.y + 0.5f, blockPosition.z + 0.5f);
 
         } catch (Exception e) {
@@ -279,23 +331,81 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         }
     }
 
+    private void CancelTimer () {
+        if (timerTask != null && !timerTask.isDone()) { timerTask.cancel(true); }
+        timerTask = null;
+    }
+
     private Vector3d calculateNewPosition(Vector3i baseTransform) {
+        List<Integer> availableFaces = new ArrayList<>();
+
+        // Cara 0: X+1 (derecha)
+        if (world.getBlockType(new Vector3i(baseTransform.x + 1, baseTransform.y, baseTransform.z)).getId().equals("Empty")) { availableFaces.add(0); }
+        // Cara 1: X-1 (izquierda)
+        if (world.getBlockType(new Vector3i(baseTransform.x - 1, baseTransform.y, baseTransform.z)).getId().equals("Empty")) { availableFaces.add(1); }
+        // Cara 2: Y+1 (arriba)
+        if (world.getBlockType(new Vector3i(baseTransform.x, baseTransform.y + 1, baseTransform.z)).getId().equals("Empty")) { availableFaces.add(2); }
+        // Cara 3: Y-1 (abajo)
+        if (world.getBlockType(new Vector3i(baseTransform.x, baseTransform.y - 1, baseTransform.z)).getId().equals("Empty")) { availableFaces.add(3); }
+        // Cara 4: Z+1 (frente)
+        if (world.getBlockType(new Vector3i(baseTransform.x, baseTransform.y, baseTransform.z + 1)).getId().equals("Empty")) { availableFaces.add(4); }
+        // Cara 5: Z-1 (atrás)
+        if (world.getBlockType(new Vector3i(baseTransform.x, baseTransform.y, baseTransform.z - 1)).getId().equals("Empty")) { availableFaces.add(5); }
+        // Si no hay caras disponibles, retornar posición central del bloque
+        if (availableFaces.isEmpty()) { return new Vector3d(baseTransform.x + 0.5, baseTransform.y + 0.5, baseTransform.z + 0.5); }
+
+        // Elegir una cara aleatoria de las disponibles
         Random random = new Random();
-        double newX = baseTransform.x + 0.01 + (random.nextDouble() * 0.98);
-        double newY = baseTransform.y + 0.01 + (random.nextDouble() * 0.98);
-        double newZ = baseTransform.z + 0.01 + (random.nextDouble() * 0.98);
-        Vector3d randomTransform = new Vector3d(newX, newY, newZ);
-        double offset = 0.05f;
+        int selectedFace = availableFaces.get(random.nextInt(availableFaces.size()));
 
-        Random randomValue = new Random();
-        int rnd = randomValue.nextInt(100);
+        // Offset pequeño para que la partícula aparezca ligeramente fuera del bloque
+        double offset = 0.05;
 
-        // Como colocarle posición a una partícula...
-        if(rnd >= 0 && rnd < 20) { newX = baseTransform.x + 1 + offset; }
-        else if (rnd >= 20 && rnd < 40) { newX = baseTransform.x - offset; }
-        else if(rnd >= 40 && rnd < 60) { newY = baseTransform.y + 1 + offset; }
-        else if (rnd >= 60 && rnd < 80) { newZ = baseTransform.z + 1 + offset; }
-        else { newZ = baseTransform.z - offset; }
+        // Posición aleatoria dentro de la cara seleccionada
+        double randomU = 0.1 + (random.nextDouble() * 0.8); // Entre 0.1 y 0.9
+        double randomV = 0.1 + (random.nextDouble() * 0.8); // Entre 0.1 y 0.9
+
+        double newX = baseTransform.x + 0.5;
+        double newY = baseTransform.y + 0.5;
+        double newZ = baseTransform.z + 0.5;
+
+        switch (selectedFace) {
+            case 0: // X+1 (cara derecha)
+                newX = baseTransform.x + 1 + offset;
+                newY = baseTransform.y + randomU;
+                newZ = baseTransform.z + randomV;
+                break;
+
+            case 1: // X-1 (cara izquierda)
+                newX = baseTransform.x - offset;
+                newY = baseTransform.y + randomU;
+                newZ = baseTransform.z + randomV;
+                break;
+
+            case 2: // Y+1 (cara superior)
+                newX = baseTransform.x + randomU;
+                newY = baseTransform.y + 1 + offset;
+                newZ = baseTransform.z + randomV;
+                break;
+
+            case 3: // Y-1 (cara inferior)
+                newX = baseTransform.x + randomU;
+                newY = baseTransform.y - offset;
+                newZ = baseTransform.z + randomV;
+                break;
+
+            case 4: // Z+1 (cara frontal)
+                newX = baseTransform.x + randomU;
+                newY = baseTransform.y + randomV;
+                newZ = baseTransform.z + 1 + offset;
+                break;
+
+            case 5: // Z-1 (cara trasera)
+                newX = baseTransform.x + randomU;
+                newY = baseTransform.y + randomV;
+                newZ = baseTransform.z - offset;
+                break;
+        }
 
         return new Vector3d(newX, newY, newZ);
     }
