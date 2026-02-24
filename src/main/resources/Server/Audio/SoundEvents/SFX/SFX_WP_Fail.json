@@ -1,0 +1,21 @@
+{
+  "Layers": [
+    {
+      "Files": [ "Sounds/Blocks/WeakPoint/WP_Fail.ogg" ],
+      "RandomSettings": {
+        "MaxPitch": 1.6500422849992202,
+        "MinPitch": -1.8240371213405997
+      },
+      "StartDelay": 0,
+      "Volume": -0.020599913279623294
+    },
+    {
+      "Files": [
+        "Sounds/Blocks/WeakPoint/WP_Fail.ogg"
+      ],
+      "Volume": 6.0
+    }
+  ],
+  "PreventSoundInterruption": true,
+  "Volume": -5
+}

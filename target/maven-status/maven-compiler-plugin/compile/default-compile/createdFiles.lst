@@ -1,2 +1,5 @@
+Tenzinn\WeakPointConfig$ItemDrop.class
+Tenzinn\WeakPointConfig$ExtraDrop.class
 Tenzinn\Events\MiningSystem.class
 Tenzinn\WeakPoint.class
+Tenzinn\WeakPointConfig.class

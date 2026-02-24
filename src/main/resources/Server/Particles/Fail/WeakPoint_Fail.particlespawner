@@ -1,0 +1,109 @@
+{
+  "RenderMode": "Erosion",
+  "ParticleRotationInfluence": "Billboard",
+  "MaxConcurrentParticles": 1,
+  "TrailSpawnerPositionMultiplier": 1,
+  "TrailSpawnerRotationMultiplier": 1,
+  "SpawnRate": {
+    "Min": 1.6,
+    "Max": 1.6
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Star2.png",
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "None",
+    "Animation": {
+      "0": {
+        "Opacity": 0.75,
+        "Color": "#FF0000",
+        "Scale": {
+          "X": {
+            "Min": 0.1,
+            "Max": 0.1
+          },
+          "Y": {
+            "Min": 0.1,
+            "Max": 0.1
+          }
+        }
+      },
+      "10": {
+        "Color": "#FF0000",
+        "Opacity": 0.9,
+        "Scale": {
+          "X": {
+            "Min": 0.16,
+            "Max": 0.16
+          },
+          "Y": {
+            "Min": 0.16,
+            "Max": 0.16
+          }
+        }
+      },
+      "20": {
+        "Opacity": 0.75,
+        "Color": "#FF0000",
+        "Scale": {
+          "X": {
+            "Min": 0.12,
+            "Max": 0.12
+          },
+          "Y": {
+            "Min": 0.12,
+            "Max": 0.12
+          }
+        }
+      },
+      "35": {
+        "Color": "#FF0000",
+        "Opacity": 0.0,
+        "Scale": {
+          "X": {
+            "Min": 0.2,
+            "Max": 0.2
+          },
+          "Y": {
+            "Min": 0.2,
+            "Max": 0.2
+          }
+        }
+      },
+      "100": {
+        "Color": "#FF0000",
+        "Opacity": 0.0,
+        "Scale": {
+          "X": {
+            "Min": 0.2,
+            "Max": 0.2
+          },
+          "Y": {
+            "Min": 0.2,
+            "Max": 0.2
+          }
+        }
+      }
+    },
+    "InitialAnimationFrame": {
+      "Scale": {
+        "X": {
+          "Min": 0.1,
+          "Max": 0.1
+        }
+      },
+      "Opacity": 0.5,
+      "Color": "#FF0000"
+      }
+    }
+  },
+  "LinearFiltering": true,
+  "Shape": "Sphere",
+  "UseEmitDirection": true,
+  "TotalParticles": {
+    "Min": 1,
+    "Max": 1
+  },
+  "LifeSpan": 1,
+  "SpawnBurst": false,
+  "ParticleRotateWithSpawner": true
+}

@@ -5,18 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fc9be20-2c1d-46be-a0e4-41bd6542a398" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPointConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Audio/SoundEvents/SFX/SFX_WP_Drop.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Audio/SoundEvents/SFX/SFX_WP_Fail.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Audio/SoundEvents/SFX/SFX_WP_Win.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Fail/WeakPoint_Fail.particlespawner" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Fail/WeakPoint_Spawner_Fail.particlesystem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Win/WeakPoint_Spawner_Win.particlesystem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Win/WeakPoint_Win.particlespawner" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/TestPlayerViewCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Blue_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Blue_Shape.particlespawner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Red_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Red_Shape.particlespawner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Weak_Point_Particle.particlesystem" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/White_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/White_Shape.particlespawner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Blue_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Server/Particles/Blue_Shape.particlespawner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Red_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Server/Particles/Red_Shape.particlespawner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Server/Particles/Weak_Point_Particle.particlesystem" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/White_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Server/Particles/White_Shape.particlespawner" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Blue_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Punch/Blue_Shape.particlespawner" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Red_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Punch/Red_Shape.particlespawner" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Punch/Weak_Point_Particle.particlesystem" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/White_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Punch/White_Shape.particlespawner" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Blue_Shape.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Red_Shape.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/White_Shape.particlespawner" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
@@ -77,6 +88,7 @@
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Documentos/GitHub/WeakPoint/src/main/resources/Server/Particles/Fail&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -91,12 +103,19 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Particles\Fail" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Particles\Win" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Particles" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Audio\SoundEvents\SFX" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Audio\SoundEvents" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Documentos\GitHub\Countertale\src\main\resources\Server\Prefabs" />
-      <recent name="D:\Games\Hytale My Mods\Deathmatch\Countertale\src\main\resources\Common\UI\Custom" />
-      <recent name="D:\Games\Hytale My Mods\Tutorials\CustomUI\custom-test\src\main\resources\Common\UI\Custom" />
-      <recent name="D:\Games\Hytale My Mods\Tutorials\CustomUI\custom-test\src\main\resources" />
-      <recent name="D:\Games\Hytale My Mods\Tutorials\CustomUI\custom-test\src\main" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Particles\Fail" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Particles\Win" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Particles\Punch" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Common\Sounds\Blocks\WeakPoint" />
+      <recent name="D:\Documentos\GitHub\WeakPoint\src\main\resources\Server\Audio\SoundEvents\SFX" />
     </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="Tenzinn.Admin.UI" />
@@ -135,7 +154,6 @@
     <attachedChunks>
       <set>
         <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.240" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.240" />
       </set>
     </attachedChunks>
   </component>

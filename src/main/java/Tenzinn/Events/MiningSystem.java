@@ -1,5 +1,6 @@
 package Tenzinn.Events;
 
+import Tenzinn.WeakPointConfig;
 import com.hypixel.hytale.protocol.*;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -11,6 +12,9 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.server.core.HytaleServer;
+import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -61,10 +65,19 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         }
     }
 
+    private void launchSound (CommandBuffer<EntityStore> buffer, String sound) {
+        if(sound.equalsIgnoreCase("win")) SoundUtil.playSoundEvent2d(SoundEvent.getAssetMap().getIndex("SFX_WP_Win"), SoundCategory.SFX, buffer);
+        else if(sound.equalsIgnoreCase("fail")) SoundUtil.playSoundEvent2d(SoundEvent.getAssetMap().getIndex("SFX_WP_Fail"), SoundCategory.SFX, buffer);
+        else SoundUtil.playSoundEvent2d(SoundEvent.getAssetMap().getIndex("SFX_WP_Drop"), SoundCategory.SFX, buffer);
+    }
+
     @Override
     public void handle(int i, ArchetypeChunk<EntityStore> chunk, Store<EntityStore> store, CommandBuffer<EntityStore> buffer, DamageBlockEvent event) {
         if (event.getBlockType() == BlockType.EMPTY) return;
-        if (!event.getBlockType().getId().contains("Ore")) return;
+        if (!WeakPointConfig.isValidBlock(event.getBlockType().getId())) return;
+
+        float damage = event.getDamage();
+        event.setDamage(0);
 
         Ref<EntityStore> ref = chunk.getReferenceTo(i);
         Player player = store.getComponent(ref, Player.getComponentType());
@@ -77,8 +90,20 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
 
         Vector3i targetBlock = event.getTargetBlock();
 
+        // BLOQUE A PUNTO DE ROMPERSE
+        if (event.getCurrentDamage() <= event.getDamage()) {
+            event.setCancelled(true);
+            launchSound(buffer, "drop");
+            BreakBlock(targetBlock, event.getBlockType().getId(), store, ref);
+            return;
+        }
+
         // VERIFICAR SI EL BLOQUE SE VA A ROMPER (ANTES de procesar)
-        if (event.getCurrentDamage() < 0.1f) { FinishMining(); return; }
+        if (event.getCurrentDamage() < 0.1f) {
+            launchSound(buffer, "win");
+            FinishMining();
+            return;
+        }
 
         // Verificar si es el mismo bloque
         boolean isNewBlock = false;
@@ -100,8 +125,9 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         try {
             if (isNewBlock || particlePosition == null) {
                 DeleteOldParticleSystem();
+                event.setDamage(damage);
 
-                SpawnParticleSystem packet = CreateParticle(event, true);
+                SpawnParticleSystem packet = CreateParticle(event, true, "punch");
                 if (packet != null) writeMethod.invoke(playerRef.getPacketHandler(), packet);
 
                 CreateParticleSystem(playerRef, event);
@@ -111,17 +137,21 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
                 float distance = hitPosition.distanceTo(particlePosition.toVector3f());
 
                 if (distance < offsetPunch) {
-                    // Reproducir sonido
-                    SoundUtil.playSoundEvent2d(SoundEvent.getAssetMap().getIndex("SFX_Crystal_Break"), SoundCategory.SFX, buffer);
+                    event.setDamage(damage);
+                    launchSound(buffer, "win");
+                    SpawnParticleSystem packer = CreateParticle(event, false, "win");
+                    if (packer != null) writeMethod.invoke(playerRef.getPacketHandler(), packer);
 
                     // Eliminar y crear nuevo
                     DeleteOldParticleSystem();
 
-                    SpawnParticleSystem packet = CreateParticle(event, true);
+                    SpawnParticleSystem packet = CreateParticle(event, true, "punch");
                     if (packet != null) writeMethod.invoke(playerRef.getPacketHandler(), packet);
 
                     CreateParticleSystem(playerRef, event);
                 } else {
+                    // Reproducir sonido
+                    launchSound(buffer, "fail");
                     CancelMining(event.getBlockType().getId());
                 }
             }
@@ -151,7 +181,7 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         timerTask = HytaleServer.SCHEDULED_EXECUTOR.scheduleWithFixedDelay(() -> {
             try {
                 if(maxTime > currentTime) {
-                    SpawnParticleSystem packet = CreateParticle(event, false);
+                    SpawnParticleSystem packet = CreateParticle(event, false, "punch");
                     if (packet != null) writeMethod.invoke(playerRef.getPacketHandler(), packet);
 
                     currentTime += 0.35F;
@@ -162,7 +192,7 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         }, 350, 350, TimeUnit.MILLISECONDS);
     }
 
-    private SpawnParticleSystem CreateParticle(DamageBlockEvent event, boolean isNew) {
+    private SpawnParticleSystem CreateParticle(DamageBlockEvent event, boolean isNew, String particle) {
 
         if(event.getDamage() >= event.getCurrentDamage()) {
             DeleteOldParticleSystem();
@@ -174,7 +204,12 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         if(event.getBlockType().getId().equals("Empty")) return null;
 
         SpawnParticleSystem packet = new SpawnParticleSystem();
-        packet.particleSystemId = "Weak_Point_Particle";
+        switch (particle.toLowerCase()) {
+            case "win": packet.particleSystemId = "WeakPoint_Spawner_Win"; break;
+            case "fail": packet.particleSystemId = "WeakPoint_Spawner_Fail"; break;
+            case "punch": packet.particleSystemId = "Weak_Point_Particle"; break;
+        }
+
         packet.position = new Position(particlePosition.x, particlePosition.y, particlePosition.z);
         packet.scale = 1.0f;
 
@@ -192,6 +227,7 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
     private void CancelMining(String id) {
         FinishMining();
 
+        world.setBlock(posBlock.x, posBlock.y, posBlock.z, "Empty");
         world.setBlock(posBlock.x, posBlock.y, posBlock.z, id);
     }
 
@@ -408,6 +444,31 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         }
 
         return new Vector3d(newX, newY, newZ);
+    }
+
+    private void BreakBlock(Vector3i pos, String blockId, Store<EntityStore> store, Ref<EntityStore> ref) {
+        DeleteOldParticleSystem();
+
+        world.setBlock(pos.x, pos.y, pos.z, "Empty");
+
+        // Main drops (siempre se dan)
+        List<WeakPointConfig.ItemDrop> mainDrops = WeakPointConfig.getMainDrops(blockId);
+        for (WeakPointConfig.ItemDrop drop : mainDrops) {
+            giveItemToPlayer(drop.itemId, drop.quantity, store, ref);
+        }
+
+        // Extra drops (con probabilidad y límite)
+        List<WeakPointConfig.ExtraDrop> extraDrops = WeakPointConfig.getExtraDrops(blockId);
+        for (WeakPointConfig.ExtraDrop drop : extraDrops) {
+            giveItemToPlayer(drop.itemId, drop.quantity, store, ref);
+        }
+    }
+
+    private void giveItemToPlayer(String itemId, int quantity, Store<EntityStore> store, Ref<EntityStore> ref) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) return;
+
+        player.getInventory().getCombinedHotbarFirst().addItemStack(new ItemStack(itemId, quantity));
     }
 
     @Nullable @Override
