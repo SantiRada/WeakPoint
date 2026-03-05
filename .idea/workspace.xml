@@ -5,29 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fc9be20-2c1d-46be-a0e4-41bd6542a398" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPointConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Audio/SoundEvents/SFX/SFX_WP_Drop.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Audio/SoundEvents/SFX/SFX_WP_Fail.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Audio/SoundEvents/SFX/SFX_WP_Win.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Fail/WeakPoint_Fail.particlespawner" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Fail/WeakPoint_Spawner_Fail.particlesystem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Win/WeakPoint_Spawner_Win.particlesystem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Win/WeakPoint_Win.particlespawner" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/DashboardCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/GetCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/MiningCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/MiningLimits.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/UI/DashboardPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/UI/Data/DashboardEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Common/UI/Custom/Dashboard.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Blue_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Punch/Blue_Shape.particlespawner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Red_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Punch/Red_Shape.particlespawner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Punch/Weak_Point_Particle.particlesystem" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Server/Particles/White_Shape.particlespawner" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Server/Particles/Punch/White_Shape.particlespawner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Blue_Shape.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Red_Shape.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/Weak_Point_Particle.particlesystem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/Particles/White_Shape.particlespawner" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPointConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPointConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>

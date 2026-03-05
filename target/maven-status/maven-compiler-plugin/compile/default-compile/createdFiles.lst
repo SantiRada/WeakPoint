@@ -1,5 +1,16 @@
 Tenzinn\WeakPointConfig$ItemDrop.class
-Tenzinn\WeakPointConfig$ExtraDrop.class
+Tenzinn\Commands\DashboardCommand.class
 Tenzinn\Events\MiningSystem.class
+Tenzinn\Commands\MiningCommand.class
+Tenzinn\MiningLimits$CollectResult.class
 Tenzinn\WeakPoint.class
+Tenzinn\MiningLimits.class
+Tenzinn\Commands\GetCommand.class
+Tenzinn\Events\MiningSystem$RespawnState.class
+Tenzinn\WeakPointConfig$ExtraDrop.class
+Tenzinn\UI\DashboardPage.class
+Tenzinn\Events\MiningSystem$BlockState.class
+Tenzinn\MiningLimits$PlayerData.class
+Tenzinn\UI\Data\DashboardEvent.class
 Tenzinn\WeakPointConfig.class
+Tenzinn\MiningLimits$PlayerConfig.class
