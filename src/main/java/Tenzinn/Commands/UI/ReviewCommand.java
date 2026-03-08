@@ -1,6 +1,6 @@
-package Tenzinn.Commands;
+package Tenzinn.Commands.UI;
 
-import Tenzinn.UI.DashboardPage;
+import Tenzinn.UI.ReviewPage;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -13,13 +13,13 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayer
 
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
-public class DashboardCommand extends AbstractPlayerCommand {
+public class ReviewCommand extends AbstractPlayerCommand {
 
-    public DashboardCommand(String name, String description) { super(name, description); }
+    public ReviewCommand(String name, String description) { super(name, description); }
 
     @Override
     protected void execute(@NonNullDecl CommandContext commandContext, @NonNullDecl Store<EntityStore> store, @NonNullDecl Ref<EntityStore> ref, @NonNullDecl PlayerRef playerRef, @NonNullDecl World world) {
         Player player = commandContext.senderAs(Player.class);
-        player.getPageManager().openCustomPage(ref, store, new DashboardPage(playerRef));
+        player.getPageManager().openCustomPage(ref, store, new ReviewPage(playerRef));
     }
 }

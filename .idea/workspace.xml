@@ -5,17 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fc9be20-2c1d-46be-a0e4-41bd6542a398" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/DashboardCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/GetCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/MiningCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/MiningLimits.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/UI/DashboardPage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/UI/Data/DashboardEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Common/UI/Custom/Dashboard.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/Mining/SetCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/UI/ReviewCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/UI/ReviewPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Common/UI/Custom/Review.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Events/MiningSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.md" beforeDir="false" afterPath="$PROJECT_DIR$/data.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/DashboardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/UI/DashboardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/GetCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/Mining/GetCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/MiningCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/Commands/Mining/MiningCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/MiningLimits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/MiningLimits.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/UI/DashboardPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/UI/DashboardPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPointConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tenzinn/WeakPointConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>

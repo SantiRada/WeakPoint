@@ -1,0 +1,61 @@
+@Background = PatchStyle(TexturePath: "media/background2.png");
+
+@Icon01 = PatchStyle(TexturePath: "media/copper.png");
+@Icon02 = PatchStyle(TexturePath: "media/iron.png");
+@Icon03 = PatchStyle(TexturePath: "media/silver.png");
+@Icon04 = PatchStyle(TexturePath: "media/gold.png");
+@Icon05 = PatchStyle(TexturePath: "media/thorium.png");
+@Icon06 = PatchStyle(TexturePath: "media/cobalt.png");
+@Icon07 = PatchStyle(TexturePath: "media/adamantite.png");
+@Icon08 = PatchStyle(TexturePath: "media/mithril.png");
+@Icon09 = PatchStyle(TexturePath: "media/onyxium.png");
+
+Group #Review {
+    FlexWeight: 1;
+    LayoutMode: Top;
+    Padding: (Left: 32, Top: 32);
+    Background: (Color: #000000(0.5));
+
+    Group #Window {
+        LayoutMode: Top;
+        Padding: (Full: 32);
+        Background: @Background;
+        Anchor: (Right: 600);
+
+        Label {
+            Anchor: (Bottom: 24);
+            Text: "Mining System Dashboard";
+            Style: (TextColor: #FFFFFF, RenderBold: true, FontSize: 32);
+        }
+
+        Group #ListUsers {
+            LayoutMode: Top;
+
+            Group #Header {
+                FlexWeight: 1;
+                LayoutMode: Middle;
+                Padding: (Horizontal: 24);
+                Anchor: (Height: 60, Bottom: 6);
+                Background: (Color: #000000(0.1));
+
+                Group {
+                    LayoutMode: Left;
+
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I1 { Background: @Icon01; Anchor: (Width: 30, Height: 30); } }
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I2 { Background: @Icon02; Anchor: (Width: 30, Height: 30); } }
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I3 { Background: @Icon03; Anchor: (Width: 30, Height: 30); } }
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I4 { Background: @Icon04; Anchor: (Width: 30, Height: 30); } }
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I5 { Background: @Icon05; Anchor: (Width: 30, Height: 30); } }
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I6 { Background: @Icon06; Anchor: (Width: 30, Height: 30); } }
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I7 { Background: @Icon07; Anchor: (Width: 30, Height: 30); } }
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I8 { Background: @Icon08; Anchor: (Width: 30, Height: 30); } }
+                    Group { FlexWeight: 1; LayoutMode: Middle; Anchor: (Right: 12); Group #I9 { Background: @Icon09; Anchor: (Width: 30, Height: 30); } }
+
+                    Label { FlexWeight: 2; Text: "Time to Reset"; Style: (TextColor: #FFFFFF(0.9), FontSize: 14, RenderBold: true, Alignment: Center); }
+
+                    Label #I10 { FlexWeight: 2; Text: "Total Mining"; Style: (TextColor: #FFFFFF(0.9), FontSize: 14, RenderBold: true, Alignment: Center); }
+                }
+            }
+        }
+    }
+}

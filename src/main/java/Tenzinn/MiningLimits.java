@@ -25,11 +25,26 @@ public class MiningLimits {
         public int idleResetSeconds;
         public Map<String, Integer> minerals;
 
-        PlayerConfig(int totalMinerals, int timeToReset, int idleResetSeconds, Map<String, Integer> minerals) {
+        public PlayerConfig(int totalMinerals, int timeToReset, int idleResetSeconds, Map<String, Integer> minerals) {
             this.totalMinerals    = totalMinerals;
             this.timeToReset      = timeToReset;
             this.idleResetSeconds = idleResetSeconds;
             this.minerals         = minerals;
+        }
+    }
+
+    /**
+     * Representa solo los campos que fueron explícitamente sobreescritos
+     * para un jugador. Los campos con valor null significan "usar el global".
+     */
+    public static class PlayerDiff {
+        public Integer totalMinerals;               // null = usar global
+        public Integer timeToReset;                 // null = usar global
+        public Integer idleResetSeconds;            // null = usar global
+        public final Map<String, Integer> minerals; // solo minerales editados
+
+        public PlayerDiff() {
+            this.minerals = new LinkedHashMap<>();
         }
     }
 
@@ -41,10 +56,10 @@ public class MiningLimits {
         public long quotaFullTime;
 
         PlayerData(String uuid) {
-            this.uuid              = uuid;
-            this.totalCollected    = 0;
+            this.uuid               = uuid;
+            this.totalCollected     = 0;
             this.lastCollectionTime = System.currentTimeMillis();
-            this.quotaFullTime     = -1;
+            this.quotaFullTime      = -1;
         }
 
         public void reset(int value) {
@@ -59,15 +74,24 @@ public class MiningLimits {
             totalCollected      = 0;
             byType.clear();
             quotaFullTime       = -1;
-
             lastCollectionTime  = System.currentTimeMillis();
         }
     }
 
     private static PlayerConfig globalConfig = defaultConfig();
+
+    // Config completa en memoria (global + diff aplicado) — usada en runtime
     private static final Map<String, PlayerConfig> playerOverrides = new ConcurrentHashMap<>();
+
+    // Solo los campos editados por jugador — usados para persistir players.json
+    private static final Map<String, PlayerDiff> playerDiffs = new ConcurrentHashMap<>();
+
     private static final Map<String, PlayerData> playerData = new ConcurrentHashMap<>();
     private static ScheduledExecutorService resetScheduler;
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Init
+    // ──────────────────────────────────────────────────────────────────────
 
     public static void load() {
         loadGlobalConfig();
@@ -90,6 +114,10 @@ public class MiningLimits {
         return new PlayerConfig(32, 300, 600, minerals);
     }
 
+    // ──────────────────────────────────────────────────────────────────────
+    // Carga
+    // ──────────────────────────────────────────────────────────────────────
+
     private static void loadGlobalConfig() {
         try {
             Path path = Paths.get(getMiningConfigPath());
@@ -101,14 +129,11 @@ public class MiningLimits {
             String content = new String(Files.readAllBytes(path));
             JsonObject root = new Gson().fromJson(content, JsonObject.class);
 
-            int total       = root.has("totalMinerals")    ? root.get("totalMinerals").getAsInt()    : 32;
-            int resetTime   = root.has("timeToReset")      ? root.get("timeToReset").getAsInt()      : 300;
-            int idleReset   = root.has("idleResetSeconds") ? root.get("idleResetSeconds").getAsInt() : 600;
+            int total     = root.has("totalMinerals")    ? root.get("totalMinerals").getAsInt()    : 32;
+            int resetTime = root.has("timeToReset")      ? root.get("timeToReset").getAsInt()      : 300;
+            int idleReset = root.has("idleResetSeconds") ? root.get("idleResetSeconds").getAsInt() : 600;
 
-            Map<String, Integer> minerals = new LinkedHashMap<>();
-            minerals.putAll(defaultConfig().minerals);
-
-            // Sobrescribir con lo que haya en el JSON
+            Map<String, Integer> minerals = new LinkedHashMap<>(defaultConfig().minerals);
             if (root.has("minerals")) {
                 JsonObject min = root.getAsJsonObject("minerals");
                 for (Map.Entry<String, JsonElement> entry : min.entrySet()) {
@@ -127,28 +152,32 @@ public class MiningLimits {
     private static void loadPlayerOverrides() {
         try {
             Path path = Paths.get(getPlayersPath());
-            if (!Files.exists(path)) return; // sin overrides es normal
+            if (!Files.exists(path)) return;
 
             String content = new String(Files.readAllBytes(path));
             JsonObject root = new Gson().fromJson(content, JsonObject.class);
-            if (!root.has("players")) return;
+            if (root == null || !root.has("players")) return;
 
             JsonObject players = root.getAsJsonObject("players");
             for (Map.Entry<String, JsonElement> entry : players.entrySet()) {
-                String     uuid    = entry.getKey();
-                JsonObject cfg     = entry.getValue().getAsJsonObject();
+                String     uuid = entry.getKey();
+                JsonObject cfg  = entry.getValue().getAsJsonObject();
 
-                int total     = cfg.has("totalMinerals")    ? cfg.get("totalMinerals").getAsInt()    : globalConfig.totalMinerals;
-                int resetTime = cfg.has("timeToReset")      ? cfg.get("timeToReset").getAsInt()      : globalConfig.timeToReset;
-                int idleReset = cfg.has("idleResetSeconds") ? cfg.get("idleResetSeconds").getAsInt() : globalConfig.idleResetSeconds;
-
-                Map<String, Integer> minerals = new LinkedHashMap<>(globalConfig.minerals);
+                // ── Reconstruir el diff (solo lo que estaba en el JSON) ──
+                PlayerDiff diff = new PlayerDiff();
+                if (cfg.has("totalMinerals"))    diff.totalMinerals    = cfg.get("totalMinerals").getAsInt();
+                if (cfg.has("timeToReset"))      diff.timeToReset      = cfg.get("timeToReset").getAsInt();
+                if (cfg.has("idleResetSeconds")) diff.idleResetSeconds = cfg.get("idleResetSeconds").getAsInt();
                 if (cfg.has("minerals")) {
                     JsonObject min = cfg.getAsJsonObject("minerals");
-                    for (Map.Entry<String, JsonElement> m : min.entrySet()) { minerals.put(m.getKey().toLowerCase(), m.getValue().getAsInt()); }
+                    for (Map.Entry<String, JsonElement> m : min.entrySet()) {
+                        diff.minerals.put(m.getKey().toLowerCase(), m.getValue().getAsInt());
+                    }
                 }
+                playerDiffs.put(uuid, diff);
 
-                playerOverrides.put(uuid, new PlayerConfig(total, resetTime, idleReset, minerals));
+                // ── Reconstruir la config completa en memoria ──
+                playerOverrides.put(uuid, buildEffectiveConfig(diff));
             }
 
             System.out.println("[MiningLimits] players.json cargado: " + playerOverrides.size() + " overrides.");
@@ -158,29 +187,26 @@ public class MiningLimits {
         }
     }
 
+    // ──────────────────────────────────────────────────────────────────────
+    // Runtime
+    // ──────────────────────────────────────────────────────────────────────
+
     private static void startResetTicker() {
         if (resetScheduler != null && !resetScheduler.isShutdown()) resetScheduler.shutdownNow();
         resetScheduler = Executors.newSingleThreadScheduledExecutor();
         resetScheduler.scheduleWithFixedDelay(() -> {
             long now = System.currentTimeMillis();
             for (Map.Entry<String, PlayerData> entry : playerData.entrySet()) {
-                PlayerData  data = entry.getValue();
-                PlayerConfig cfg = getEffectiveConfig(entry.getKey());
+                PlayerData   data = entry.getValue();
+                PlayerConfig cfg  = getEffectiveConfig(entry.getKey());
 
-                // Reset por cupo lleno
                 if (data.quotaFullTime > 0) {
                     long secondsSinceFull = (now - data.quotaFullTime) / 1000;
-                    if (secondsSinceFull >= cfg.timeToReset) {
-                        data.reset(1);
-                        continue;
-                    }
+                    if (secondsSinceFull >= cfg.timeToReset) { data.reset(1); continue; }
                 }
 
-                // Reset por inactividad
                 long secondsIdle = (now - data.lastCollectionTime) / 1000;
-                if (secondsIdle >= cfg.idleResetSeconds) {
-                    data.reset(2);
-                }
+                if (secondsIdle >= cfg.idleResetSeconds) data.reset(2);
             }
         }, 1, 1, TimeUnit.SECONDS);
     }
@@ -193,7 +219,6 @@ public class MiningLimits {
 
         String mineralType = resolveMineralType(blockId, cfg);
 
-        // 1. Verificar límite por tipo
         if (mineralType != null) {
             int typeLimit = cfg.minerals.getOrDefault(mineralType, -1);
             if (typeLimit > 0) {
@@ -202,17 +227,12 @@ public class MiningLimits {
             }
         }
 
-        // 2. Verificar límite total
         if (data.totalCollected >= cfg.totalMinerals) return CollectResult.BLOCKED_TOTAL;
 
-        // 3. Registrar
         data.totalCollected++;
         data.lastCollectionTime = System.currentTimeMillis();
-        if (mineralType != null) {
-            data.byType.merge(mineralType, 1, Integer::sum);
-        }
+        if (mineralType != null) data.byType.merge(mineralType, 1, Integer::sum);
 
-        // Marcar si se alcanzó el cupo total
         if (data.totalCollected >= cfg.totalMinerals && data.quotaFullTime < 0) {
             data.quotaFullTime = System.currentTimeMillis();
         }
@@ -220,18 +240,58 @@ public class MiningLimits {
         return CollectResult.ALLOWED;
     }
 
+    // ──────────────────────────────────────────────────────────────────────
+    // API pública
+    // ──────────────────────────────────────────────────────────────────────
+
     public static PlayerData getPlayerData(String playerUuid) {
         return playerData.get(playerUuid);
     }
 
-    public static PlayerConfig getEffectiveConfig(String playerUuid) { return playerOverrides.getOrDefault(playerUuid, globalConfig); }
+    /** Devuelve la config efectiva en memoria (global + override aplicado). */
+    public static PlayerConfig getEffectiveConfig(String playerUuid) {
+        return playerOverrides.getOrDefault(playerUuid, globalConfig);
+    }
 
-    public static void savePlayerOverride(String playerUuid, PlayerConfig config) {
-        playerOverrides.put(playerUuid, config);
+    /** Expone la config global para que SetCommand pueda leerla sin trucos. */
+    public static PlayerConfig getGlobalConfig() {
+        return globalConfig;
+    }
+
+    /**
+     * Devuelve el diff existente para un jugador, o uno vacío si todavía
+     * no tiene ningún override. SetCommand lo usa para acumular cambios
+     * sin pisar overrides previos.
+     */
+    public static PlayerDiff getPlayerDiff(String playerUuid) {
+        return playerDiffs.getOrDefault(playerUuid, new PlayerDiff());
+    }
+
+    /**
+     * Guarda un diff de overrides para un jugador específico.
+     * Solo persiste en players.json los campos presentes en el diff.
+     */
+    public static void savePlayerOverride(String playerUuid, PlayerDiff diff) {
+        playerDiffs.put(playerUuid, diff);
+        playerOverrides.put(playerUuid, buildEffectiveConfig(diff));
         persistPlayersJson();
     }
 
+    /**
+     * Reemplaza la config global y escribe mining.json.
+     * Llamado por SetCommand cuando el target es "all".
+     */
+    public static void saveGlobalConfig(PlayerConfig newConfig) {
+        globalConfig = newConfig;
+        // Reconstruir todas las configs efectivas en memoria con el nuevo global
+        for (Map.Entry<String, PlayerDiff> entry : playerDiffs.entrySet()) {
+            playerOverrides.put(entry.getKey(), buildEffectiveConfig(entry.getValue()));
+        }
+        persistMiningJson();
+    }
+
     public static void removePlayerOverride(String playerUuid) {
+        playerDiffs.remove(playerUuid);
         playerOverrides.remove(playerUuid);
         persistPlayersJson();
     }
@@ -242,13 +302,28 @@ public class MiningLimits {
         if (data == null) return 0;
 
         long now = System.currentTimeMillis();
-
         if (data.quotaFullTime > 0) {
             long elapsed = (now - data.quotaFullTime) / 1000;
             return (int) Math.max(0, cfg.timeToReset - elapsed);
         }
-
         return 0;
+    }
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Helpers internos
+    // ──────────────────────────────────────────────────────────────────────
+
+    /**
+     * Construye un PlayerConfig completo mezclando el diff con el globalConfig.
+     * Los campos null/ausentes en el diff se toman del global.
+     */
+    private static PlayerConfig buildEffectiveConfig(PlayerDiff diff) {
+        int total     = (diff.totalMinerals    != null) ? diff.totalMinerals    : globalConfig.totalMinerals;
+        int resetTime = (diff.timeToReset      != null) ? diff.timeToReset      : globalConfig.timeToReset;
+        int idleReset = (diff.idleResetSeconds != null) ? diff.idleResetSeconds : globalConfig.idleResetSeconds;
+        Map<String, Integer> minerals = new LinkedHashMap<>(globalConfig.minerals);
+        minerals.putAll(diff.minerals);
+        return new PlayerConfig(total, resetTime, idleReset, minerals);
     }
 
     private static String resolveMineralType(String blockId, PlayerConfig cfg) {
@@ -260,33 +335,76 @@ public class MiningLimits {
         return null;
     }
 
+    // ──────────────────────────────────────────────────────────────────────
+    // Persistencia
+    // ──────────────────────────────────────────────────────────────────────
+
+    /**
+     * Escribe players.json guardando SOLO los campos presentes en cada diff.
+     * Estructura:
+     * {
+     *   "players": {
+     *     "<uuid>": {
+     *       "totalMinerals": 40,          ← solo si fue editado
+     *       "minerals": { "adamantite": 10 } ← solo los minerales editados
+     *     }
+     *   }
+     * }
+     */
     private static void persistPlayersJson() {
         try {
             JsonObject root    = new JsonObject();
             JsonObject players = new JsonObject();
 
-            for (Map.Entry<String, PlayerConfig> entry : playerOverrides.entrySet()) {
-                PlayerConfig cfg  = entry.getValue();
-                JsonObject   pcfg = new JsonObject();
-                pcfg.addProperty("totalMinerals",    cfg.totalMinerals);
-                pcfg.addProperty("timeToReset",      cfg.timeToReset);
-                pcfg.addProperty("idleResetSeconds", cfg.idleResetSeconds);
+            for (Map.Entry<String, PlayerDiff> entry : playerDiffs.entrySet()) {
+                PlayerDiff diff = entry.getValue();
+                JsonObject pcfg = new JsonObject();
 
-                JsonObject minerals = new JsonObject();
-                for (Map.Entry<String, Integer> m : cfg.minerals.entrySet()) {
-                    minerals.addProperty(m.getKey(), m.getValue());
+                if (diff.totalMinerals    != null) pcfg.addProperty("totalMinerals",    diff.totalMinerals);
+                if (diff.timeToReset      != null) pcfg.addProperty("timeToReset",      diff.timeToReset);
+                if (diff.idleResetSeconds != null) pcfg.addProperty("idleResetSeconds", diff.idleResetSeconds);
+
+                if (!diff.minerals.isEmpty()) {
+                    JsonObject minerals = new JsonObject();
+                    for (Map.Entry<String, Integer> m : diff.minerals.entrySet()) {
+                        minerals.addProperty(m.getKey(), m.getValue());
+                    }
+                    pcfg.add("minerals", minerals);
                 }
-                pcfg.add("minerals", minerals);
-                players.add(entry.getKey(), pcfg);
+
+                // Solo agregar el jugador si hay al menos un campo editado
+                if (pcfg.size() > 0) players.add(entry.getKey(), pcfg);
             }
 
             root.add("players", players);
-
             String json = new GsonBuilder().setPrettyPrinting().create().toJson(root);
             Files.write(Paths.get(getPlayersPath()), json.getBytes());
 
         } catch (Exception e) {
             System.err.println("[MiningLimits] Error al persistir players.json: " + e.getMessage());
+        }
+    }
+
+    /** Escribe el globalConfig en mining.json. */
+    private static void persistMiningJson() {
+        try {
+            JsonObject root = new JsonObject();
+            root.addProperty("totalMinerals",    globalConfig.totalMinerals);
+            root.addProperty("timeToReset",      globalConfig.timeToReset);
+            root.addProperty("idleResetSeconds", globalConfig.idleResetSeconds);
+
+            JsonObject minerals = new JsonObject();
+            for (Map.Entry<String, Integer> e : globalConfig.minerals.entrySet()) {
+                minerals.addProperty(e.getKey(), e.getValue());
+            }
+            root.add("minerals", minerals);
+
+            String json = new GsonBuilder().setPrettyPrinting().create().toJson(root);
+            Files.write(Paths.get(getMiningConfigPath()), json.getBytes());
+            System.out.println("[MiningLimits] mining.json actualizado.");
+
+        } catch (Exception e) {
+            System.err.println("[MiningLimits] Error al persistir mining.json: " + e.getMessage());
         }
     }
 

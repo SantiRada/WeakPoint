@@ -1,4 +1,4 @@
-package Tenzinn.Commands;
+package Tenzinn.Commands.Mining;
 
 import Tenzinn.MiningLimits;
 import com.hypixel.hytale.component.Ref;

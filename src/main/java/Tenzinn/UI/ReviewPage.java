@@ -2,10 +2,8 @@ package Tenzinn.UI;
 
 import Tenzinn.MiningLimits;
 import Tenzinn.UI.Data.DashboardEvent;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -16,30 +14,24 @@ import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCu
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 import java.util.Map;
-import java.util.Collection;
 
-public class DashboardPage extends InteractiveCustomUIPage<DashboardEvent> {
+public class ReviewPage extends InteractiveCustomUIPage<DashboardEvent> {
 
     private UICommandBuilder uiBuilder;
 
-    public DashboardPage(PlayerRef playerRef) { super(playerRef, CustomPageLifetime.CanDismiss, DashboardEvent.CODEC); }
+    public ReviewPage(PlayerRef playerRef) { super(playerRef, CustomPageLifetime.CanDismiss, DashboardEvent.CODEC); }
 
     @Override
-    public void build(@NonNullDecl Ref<EntityStore> ref, @NonNullDecl UICommandBuilder uiCommandBuilder,
-                      @NonNullDecl UIEventBuilder uiEventBuilder, @NonNullDecl Store<EntityStore> store) {
-
-        uiCommandBuilder.append("Dashboard.ui");
+    public void build(@NonNullDecl Ref<EntityStore> ref, @NonNullDecl UICommandBuilder uiCommandBuilder, @NonNullDecl UIEventBuilder uiEventBuilder, @NonNullDecl Store<EntityStore> store) {
+        uiCommandBuilder.append("Review.ui");
         uiBuilder = uiCommandBuilder;
 
-        Collection<PlayerRef> onlinePlayers = Universe.get().getPlayers();
-        for (PlayerRef online : onlinePlayers) { appendPlayerRow(online); }
-
+        setData();
         sendUpdate();
     }
 
-    private void appendPlayerRow(PlayerRef online) {
-        String uuid     = online.getUuid().toString();
-        String username = online.getUsername();
+    private void setData() {
+        String uuid     = playerRef.getUuid().toString();
 
         MiningLimits.PlayerData   data = MiningLimits.getPlayerData(uuid);
         MiningLimits.PlayerConfig cfg  = MiningLimits.getEffectiveConfig(uuid);
@@ -62,6 +54,9 @@ public class DashboardPage extends InteractiveCustomUIPage<DashboardEvent> {
 
         int    collected  = (data != null) ? data.totalCollected : 0;
         int    total      = cfg.totalMinerals;
+
+        String timeText  = formatTime(MiningLimits.getSecondsUntilReset(uuid));
+
         String totalText  = collected + "/" + total;
         String totalColor = (collected >= total) ? "#FFCC00" : "#FFFFFF(0.75)";
 
@@ -76,24 +71,21 @@ public class DashboardPage extends InteractiveCustomUIPage<DashboardEvent> {
                         "    Group {\n" +
                         "        LayoutMode: Left;\n" +
                         "\n" +
-                        "        Label {\n" +
-                        "            Text: \"" + escapeUiString(username) + "\";\n" +
-                        "            Anchor: (Right: 12, Width: 200);\n" +
-                        "            Style: (TextColor: #FFFFFF, RenderBold: true, FontSize: 18);\n" +
-                        "        }\n" +
-                        "\n" +
                         "        " + mineralLabels +
-                        "Label { FlexWeight: 2; Text: \"" + totalText + "\"; " +
-                        "Style: (TextColor: " + totalColor + ", FontSize: 14, Alignment: Center); }\n" +
+                        "   Label { FlexWeight: 2; Text: \"" + timeText + "\"; " +
+                        "       Style: (TextColor: #FFFFFF, FontSize: 14, Alignment: Center); }\n" +
+                        "   Label { FlexWeight: 2; Text: \"" + totalText + "\"; " +
+                        "       Style: (TextColor: " + totalColor + ", FontSize: 14, Alignment: Center); }\n" +
                         "    }\n" +
                         "}";
 
         uiBuilder.appendInline("#ListUsers", inlineUI);
     }
 
-    // Escapa comillas dobles en strings que van dentro del .ui inline
-    private static String escapeUiString(String s) {
-        if (s == null) return "";
-        return s.replace("\\", "\\\\").replace("\"", "\\\"");
+    private String formatTime(long totalSeconds) {
+        long hours   = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 }
