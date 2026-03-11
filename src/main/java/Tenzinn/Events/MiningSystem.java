@@ -105,6 +105,13 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         return String.format("%02d:%02d", m, s);
     }
 
+    private String formatTime(long totalSeconds, boolean threePhases) {
+        long hours   = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
     private void launchSound(CommandBuffer<EntityStore> buffer, String sound) {
         if      (sound.equalsIgnoreCase("win"))  SoundUtil.playSoundEvent2d(SoundEvent.getAssetMap().getIndex("SFX_WP_Win"),  SoundCategory.SFX, buffer);
         else if (sound.equalsIgnoreCase("fail")) SoundUtil.playSoundEvent2d(SoundEvent.getAssetMap().getIndex("SFX_WP_Fail"), SoundCategory.SFX, buffer);
@@ -155,7 +162,7 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         BlockState state = blockStates.get(key);
         if (state != null) {
             if (!state.owner.equals(playerRef)) {
-                playerRef.sendMessage(Message.raw("Otro jugador ya está extrayendo este bloque.").color(Color.CYAN));
+                playerRef.sendMessage(Message.raw("Il y a déjà quelqu’un sur ce minerai.").color(Color.CYAN));
                 return;
             }
         } else {
@@ -175,11 +182,9 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
                 catch (IllegalAccessException | InvocationTargetException e) { throw new RuntimeException(e); }
             }
 
-            playerRef.sendMessage(Message.raw("No puedes minar " + blockTypeId + " con pico de " + pickaxeName).color(Color.ORANGE));
+            playerRef.sendMessage(Message.raw("Vous ne povez pas " + blockTypeId + " avec un pic de " + pickaxeName).color(Color.ORANGE));
             return;
         }
-
-
 
         final BlockState finalState = state;
         final int finalHitsNeeded   = hitsNeeded;
@@ -232,8 +237,8 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
                                 // Bloque extraído pero sin drops
                                 int secsLeft = MiningLimits.getSecondsUntilReset(uuid);
                                 String reason = quota == MiningLimits.CollectResult.BLOCKED_TOTAL
-                                        ? "Alcanzaste tu límite total de minerales. Resetea en " + secsLeft + "s."
-                                        : "Alcanzaste el límite de este tipo de mineral por ahora.";
+                                        ? "Vous avez atteint votre limite totale de minéraux. Réinitialiser à " + formatTime(secsLeft, true)
+                                        : "Vous avez atteint la limite pour ce type de minéral pour le moment.";
                                 fPlayerRef.sendMessage(Message.raw(reason).color(Color.YELLOW));
 
                                 return;
