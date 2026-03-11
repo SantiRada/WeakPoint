@@ -30,6 +30,7 @@ import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.awt.Color;
 import java.util.Map;
@@ -43,9 +44,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEvent> {
 
-
     private static class BlockState {
         PlayerRef owner;
+        Vector3f blockPosition;
         Vector3d  particlePosition;
         int       elapsedSeconds;
         int       maxSeconds;
@@ -150,13 +151,6 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
         String heldItemId  = (heldItem != null) ? heldItem.getItemId() : null;
         int hitsNeeded     = WeakPointConfig.getHitsForPickaxe(blockTypeId, heldItemId);
 
-        if (hitsNeeded < 0) {
-            // Pico incorrecto o sin pico: no puede minar este bloque
-            String pickaxeName = (heldItemId != null) ? heldItemId : "manos";
-            playerRef.sendMessage(Message.raw("No puedes minar " + blockTypeId + " con pico de " + pickaxeName).color(Color.ORANGE));
-            return;
-        }
-
         // --- Ownership ---
         BlockState state = blockStates.get(key);
         if (state != null) {
@@ -168,6 +162,24 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
             state = new BlockState(playerRef, blockTypeId);
             blockStates.put(key, state);
         }
+
+        state.blockPosition = new Vector3f(targetBlock.x + 0.5f, targetBlock.y + 0.85f, targetBlock.z + 0.5f);
+
+        if (hitsNeeded < 0) {
+            // Pico incorrecto o sin pico: no puede minar este bloque
+            String pickaxeName = (heldItemId != null) ? heldItemId : "manos";
+
+            SpawnParticleSystem fail = buildParticlePacket(state, blockTypeId, "fail");
+            if (fail != null) {
+                try { writeMethod.invoke(playerRef.getPacketHandler(), fail); }
+                catch (IllegalAccessException | InvocationTargetException e) { throw new RuntimeException(e); }
+            }
+
+            playerRef.sendMessage(Message.raw("No puedes minar " + blockTypeId + " con pico de " + pickaxeName).color(Color.ORANGE));
+            return;
+        }
+
+
 
         final BlockState finalState = state;
         final int finalHitsNeeded   = hitsNeeded;
@@ -218,16 +230,12 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
                             MiningLimits.CollectResult quota = MiningLimits.tryCollect(uuid, fBlockTypeId);
                             if (quota != MiningLimits.CollectResult.ALLOWED) {
                                 // Bloque extraído pero sin drops
-                                String defaultBlock = WeakPointConfig.getDefaultBlock(fBlockTypeId);
-                                world.setBlock(fTarget.x, fTarget.y, fTarget.z, defaultBlock);
                                 int secsLeft = MiningLimits.getSecondsUntilReset(uuid);
                                 String reason = quota == MiningLimits.CollectResult.BLOCKED_TOTAL
                                         ? "Alcanzaste tu límite total de minerales. Resetea en " + secsLeft + "s."
                                         : "Alcanzaste el límite de este tipo de mineral por ahora.";
                                 fPlayerRef.sendMessage(Message.raw(reason).color(Color.YELLOW));
 
-                                // Iniciar respawn
-                                startRespawnInGameThread(fTarget, fBlockTypeId);
                                 return;
                             }
                             // 3. Dar drops y cambiar bloque
@@ -245,6 +253,10 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
                     }
 
                 } else {
+                    state.particlePosition = calculateNewPosition(targetBlock);
+                    SpawnParticleSystem fail = buildParticlePacket(state, blockTypeId, "fail");
+                    if (fail != null) writeMethod.invoke(playerRef.getPacketHandler(), fail);
+
                     launchSound(buffer, "fail");
                     cancelMining(key, state);
                 }
@@ -310,6 +322,7 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
     private void cancelMining(String key, BlockState state) {
         cancelTask(state.particleTask);
         cancelTask(state.countdownTask);
+
         blockStates.remove(key);
 
         world.execute(() -> {
@@ -411,7 +424,8 @@ public class MiningSystem extends EntityEventSystem<EntityStore, DamageBlockEven
     private SpawnParticleSystem buildParticlePacket(BlockState state, String blockTypeId, String particle) {
         if (state.particlePosition == null) return null;
         if (blockTypeId.equals("Empty")) return null;
-        return assembleParticlePacket(state.particlePosition, particle);
+
+        return assembleParticlePacket(particle.equalsIgnoreCase("punch") ? state.particlePosition : state.blockPosition.toVector3d(), particle);
     }
 
     private SpawnParticleSystem assembleParticlePacket(Vector3d pos, String particle) {

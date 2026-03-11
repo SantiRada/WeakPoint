@@ -2,7 +2,7 @@
   "IsImportant": true,
   "Spawners": [
     {
-      "SpawnerId": "WeakPoint_Fail",
+      "SpawnerId": "Error_Punch",
       "SpawnRate": {
         "Min": 1,
         "Max": 1
@@ -14,5 +14,5 @@
       }
     }
   ],
-  "LifeSpan": 1
+  "LifeSpan": 2
 }

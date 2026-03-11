@@ -2,7 +2,7 @@
   "IsImportant": true,
   "Spawners": [
     {
-      "SpawnerId": "WeakPoint_Win",
+      "SpawnerId": "Success_Punch",
       "SpawnRate": {
         "Min": 1,
         "Max": 1
